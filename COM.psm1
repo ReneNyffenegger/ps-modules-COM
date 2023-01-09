@@ -1,3 +1,6 @@
+#
+# V0.2
+#
 set-strictMode -version latest
 
 function init {
@@ -22,15 +25,13 @@ function get-activeObject (
   try {
      return [System.Runtime.InteropServices.Marshal]::GetActiveObject($progId)
   }
-  catch {
+  catch [System.Runtime.InteropServices.COMException] {
 
-     if ($_.exception.hResult -eq -2146233087) {
-        write-warning "get-activeObject: progId $progId not found"
+     if ($_.exception.hResult -eq  -2147221021 <# -2146233087 #>) {
+     #  write-warning "get-activeObject: progId $progId not found"
         return $null
      }
-
-     $_.exception | select *
-     write-host ('HRESULT {0:x}' -f ([int64] $_.exception.hResult ))
+     throw
   }
 }
 
