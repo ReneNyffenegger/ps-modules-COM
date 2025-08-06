@@ -1,5 +1,5 @@
 #
-# V0.2
+# V0.3
 #
 set-strictMode -version latest
 
@@ -17,13 +17,13 @@ function get-activeObject (
       [string] $progId
    ) {
 
-
-  if ($psVersionTable.PsEdition -eq 'Core') {
-     return [TQ84.COM]::getActiveObject($progId)
-  }
-
   try {
-     return [System.Runtime.InteropServices.Marshal]::GetActiveObject($progId)
+     if ($psVersionTable.PsEdition -eq 'Core') {
+        return [TQ84.COM]::getActiveObject($progId)
+     }
+     else {
+        return [System.Runtime.InteropServices.Marshal]::GetActiveObject($progId)
+     }
   }
   catch [System.Runtime.InteropServices.COMException] {
 
